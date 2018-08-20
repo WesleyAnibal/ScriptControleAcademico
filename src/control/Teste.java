@@ -24,6 +24,16 @@ public class Teste {
 		List<List<String>> disci = TurmasDoAluno(driver);
 		
 		DisciplinasDoAluno(driver, disci);
+		
+		int obrigatorias = 0;
+		int optativas = 0;
+		driver.get("https://pre.ufcg.edu.br:8443/ControleAcademicoOnline/Controlador?command=AlunoHistorico");
+		WebElement historico = driver.findElement(By.xpath("//*[@id=\"integralizacao\"]/table/tbody"));
+		String[] disciplinas = historico.getText().split("\n");
+		obrigatorias = Integer.parseInt(disciplinas[0].split(" ")[4]) - Integer.parseInt(disciplinas[0].split(" ")[5]);
+		optativas = Integer.parseInt(disciplinas[1].split(" ")[4]) - Integer.parseInt(disciplinas[1].split(" ")[5]);
+		System.out.println("Faltam "+obrigatorias+" créditos de obrigatorias");
+		System.out.println("Faltam "+optativas+" créditos de optativas");
 	}
 	
 	private static void DisciplinasDoAluno(WebDriver driver, List<List<String>> disci) {
