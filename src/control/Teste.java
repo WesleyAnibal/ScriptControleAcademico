@@ -15,10 +15,11 @@ public class Teste {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--headless");
 		
+		
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\weley\\eclipse-workspace\\Controle\\lib\\chromedriver\\chromedriver.exe");
 		WebDriver driver = new ChromeDriver(options);
 		driver.get("https://pre.ufcg.edu.br:8443/ControleAcademicoOnline/");
-		Login login = new Login("", "");
+		Login login = new Login("115210629", "slash123");
 		login.FazerLogin(driver);
 		
 		List<List<String>> disci = TurmasDoAluno(driver);
@@ -34,6 +35,7 @@ public class Teste {
 		optativas = Integer.parseInt(disciplinas[1].split(" ")[4]) - Integer.parseInt(disciplinas[1].split(" ")[5]);
 		System.out.println("Faltam "+obrigatorias+" créditos de obrigatorias");
 		System.out.println("Faltam "+optativas+" créditos de optativas");
+		driver.get("https://pre.ufcg.edu.br:8443/ControleAcademicoOnline/Controlador?command=SairDoSistema");
 	}
 	
 	private static void DisciplinasDoAluno(WebDriver driver, List<List<String>> disci) {
@@ -51,8 +53,9 @@ public class Teste {
 			System.out.println(disci.get(i).get(2) + "\n   ->nota 1: "+nota01+" \n   ->nota 2: "+nota02+" \n   ->nota 3: "+nota03);
 			
 			driver.get("https://pre.ufcg.edu.br:8443/ControleAcademicoOnline/Controlador?command=AlunoTurmaFrequencia&codigo="+disci.get(i).get(0)+"&turma="+disci.get(i).get(1)+"&periodo=2018.2");
-			WebElement faltas = driver.findElement(By.xpath("//*[@id=\"conteudo\"]/div[4]/table/tbody/tr/td[4]"));
-			System.out.println("\n   -> faltas:"+ faltas.getText()+"\n");
+			WebElement faltas = driver.findElement(By.xpath("//*[@id=\"conteudo\"]/div[4]/table/tbody/tr"));
+			String[] nomes = faltas.getText().split(" ");
+			System.out.println("\n   Faltas: "+nomes[nomes.length-1]+"\n");
 
 			
 		}
@@ -63,7 +66,7 @@ public class Teste {
 		
 		driver.get("https://pre.ufcg.edu.br:8443/ControleAcademicoOnline/Controlador?command=AlunoTurmasListar");
 		
-		for (int i = 1; i <= 5 ; i++) {
+		for (int i = 1; i <= 6 ; i++) {
 			try {
 				WebElement codigo = driver.findElement(By.xpath("//div[@id='conteudo']/table/tbody/tr["+i+"]/td[2]"));
 				WebElement turma = driver.findElement(By.xpath("//div[@id='conteudo']/table/tbody/tr["+i+"]/td[4]"));
